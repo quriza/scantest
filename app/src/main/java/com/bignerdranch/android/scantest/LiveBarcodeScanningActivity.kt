@@ -40,7 +40,6 @@ import com.google.android.material.chip.Chip
 import com.google.common.base.Objects
 import java.io.IOException
 import java.util.*
-import javax.inject.Inject
 
 
 /** Demonstrates the barcode scanning workflow using camera preview.  */
@@ -55,16 +54,13 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
     private var promptChipAnimator: AnimatorSet? = null
     private var workflowModel: WorkflowModel? = null
     private var currentWorkflowState: WorkflowState? = null
-    private lateinit var sharedViewModel: SharedViewModel
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
 
-    private var barcodes : MutableList<String> = mutableListOf()
+
+    private var barcodes: MutableList<String> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // observeOnSharedViewModel()
         setContentView(R.layout.activity_live_barcode)
         preview = findViewById(R.id.camera_preview)
         graphicOverlay = findViewById<GraphicOverlay>(R.id.camera_preview_graphic_overlay).apply {
@@ -74,21 +70,23 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
 
         promptChip = findViewById(R.id.bottom_prompt_chip)
         promptChipAnimator =
-            (AnimatorInflater.loadAnimator(this, R.animator.bottom_prompt_chip_enter) as AnimatorSet).apply {
+            (AnimatorInflater.loadAnimator(
+                this,
+                R.animator.bottom_prompt_chip_enter
+            ) as AnimatorSet).apply {
                 setTarget(promptChip)
             }
 
         findViewById<View>(R.id.close_button).setOnClickListener(this)
         flashButton = findViewById<View>(R.id.flash_button).apply {
-          setOnClickListener(this@LiveBarcodeScanningActivity)
-     }
-  settingsButton = findViewById<View>(R.id.settings_button).apply {
-       setOnClickListener(this@LiveBarcodeScanningActivity)
-  }
+            setOnClickListener(this@LiveBarcodeScanningActivity)
+        }
+        settingsButton = findViewById<View>(R.id.settings_button).apply {
+            setOnClickListener(this@LiveBarcodeScanningActivity)
+        }
 
         setUpWorkflowModel()
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -121,22 +119,23 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.close_button -> {
-                val intent = Intent()
-                intent.putExtra("barcodes", barcodes.joinToString (separator = ",") { it -> it})
-                setResult(RESULT_OK, intent)
-                this.finish()
+                onBackPressed()
+                // val intent = Intent()
+                //  intent.putExtra("barcodes", barcodes.joinToString (separator = ",") { it -> it})
+                // setResult(RESULT_OK, intent)
+                // this.finish()
             }
-            R.id.flash_button -> {
-                flashButton?.let {
-                    if (it.isSelected) {
-                        it.isSelected = false
-                        cameraSource?.updateFlashMode(Camera.Parameters.FLASH_MODE_OFF)
-                    } else {
-                        it.isSelected = true
-                        cameraSource!!.updateFlashMode(Camera.Parameters.FLASH_MODE_TORCH)
-                    }
-                }
-            }
+            /* R.id.flash_button -> {
+                 flashButton?.let {
+                     if (it.isSelected) {
+                         it.isSelected = false
+                         cameraSource?.updateFlashMode(Camera.Parameters.FLASH_MODE_OFF)
+                     } else {
+                         it.isSelected = true
+                         cameraSource!!.updateFlashMode(Camera.Parameters.FLASH_MODE_TORCH)
+                     }
+                 }
+             }*/
             R.id.settings_button -> {
                 settingsButton?.isEnabled = false
                 //   startActivity(Intent(this, SettingsActivity::class.java))
@@ -215,7 +214,7 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
 
         workflowModel?.detectedBarcode?.observe(this, Observer { barcode ->
             if (barcode != null) {
-                barcodes.add(0,barcode.rawValue);
+                barcodes.add(0, barcode.rawValue);
                 val barcodeFieldList = ArrayList<BarcodeField>()
                 barcodeFieldList.add(BarcodeField("Raw Value", barcode.rawValue ?: ""))
                 BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)

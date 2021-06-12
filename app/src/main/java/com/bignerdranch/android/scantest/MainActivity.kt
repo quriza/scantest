@@ -19,10 +19,10 @@ class MainActivity : AppCompatActivity() {
         scanBtn.setOnClickListener {
             val activity = this@MainActivity
 
-            val intent = Intent(activity, LiveBarcodeScanningActivity::class.java)
-            startActivityForResult(intent, 400)
+           // val intent = Intent(activity, LiveBarcodeScanningActivity::class.java)
+            //startActivityForResult(intent, 400)
 
-            // activity.startActivity(Intent(activity, LiveBarcodeScanningActivity::class.java))
+             activity.startActivity(Intent(activity, LiveBarcodeScanningActivity::class.java))
         }
     }
 
