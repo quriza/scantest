@@ -19,17 +19,18 @@ class MainActivity : AppCompatActivity() {
         scanBtn.setOnClickListener {
             val activity = this@MainActivity
 
-           // val intent = Intent(activity, LiveBarcodeScanningActivity::class.java)
-            //startActivityForResult(intent, 400)
+           val intent = Intent(activity, LiveBarcodeScanningActivity::class.java)
+            startActivityForResult(intent, 400)
 
-             activity.startActivity(Intent(activity, LiveBarcodeScanningActivity::class.java))
+         //    activity.startActivity(Intent(activity, LiveBarcodeScanningActivity::class.java))
         }
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        this.barcodes.text = "Отсканированные баркоды :"+ data?.getStringExtra("barcodes") ?: "ничего не было отсканировано"
+        val s=this.barcodes.text
+        this.barcodes.text =  s.toString() + "Отсканированные баркоды :"+ data?.getStringExtra("barcodes") ?: "ничего не было отсканировано"
       //  Log.e("xxx", "finished")
     }
 

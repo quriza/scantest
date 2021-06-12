@@ -119,11 +119,11 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.close_button -> {
-                onBackPressed()
-                // val intent = Intent()
-                //  intent.putExtra("barcodes", barcodes.joinToString (separator = ",") { it -> it})
-                // setResult(RESULT_OK, intent)
-                // this.finish()
+               // onBackPressed()
+                 val intent = Intent()
+                  intent.putExtra("barcodes", barcodes.joinToString (separator = ",") { it -> it})
+                 setResult(RESULT_OK, intent)
+                 this.finish()
             }
             /* R.id.flash_button -> {
                  flashButton?.let {
